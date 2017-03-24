@@ -1,0 +1,23 @@
+{
+  "name": "todo-electron",
+  "version": "1.0.0",
+  "description": "todoGolang의 electron app",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coma333ryu/todoElectron.git"
+  },
+  "keywords": [
+    "todo",
+    "electron"
+  ],
+  "author": "coma333ryu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/coma333ryu/todoElectron/issues"
+  },
+  "homepage": "https://github.com/coma333ryu/todoElectron#readme"
+}
