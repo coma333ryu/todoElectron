@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="./assets/css/main.css" rel="stylesheet">
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+    <script src="./assets/js/jquery-3.2.0.min.js"></script>
+</head>
+<body>
+
+<form id="todoForm" method="post" action="">
+    <input type="hidden" id="todoIdx" name="todoIdx" value="" />
+    <input type="hidden" id="isDone" name="isDone" value="" />
+    <div id="myDIV" class="header">
+        <h2 style="margin:5px">My To Do List</h2>
+        <input type="text" id="todoTitle" name="todoTitle" value="" placeholder="Title...">
+        <input type="text" style="display: none;" />
+        <span onclick="fnAddTodo()" class="addBtn">Add</span>
+    </div>
+</form>
+
+<ul id="myUL">
+    <li>Hit the gym</li>
+    <li class="checked">Pay bills</li>
+    <li>Meet George</li>
+    <li>Buy eggs</li>
+    <li>Read a book</li>
+    <li>Organize office</li>
+</ul>
+
+<script>
+    $( document ).ready(function() {
+        console.log( "ready!" );
+    });
+
+    function fnDeleteTodo(selectIdx) {
+        $("#todoIdx").val(selectIdx);
+        $("#todoForm").attr("action", "/delete");
+        $('#todoForm').submit();
+    }
+
+    function fnUpdateTodo(selectIdx,curIsDone) {
+        $("#todoIdx").val(selectIdx);
+
+        if (curIsDone == "true") {
+            $("#isDone").val("false");
+        }else {
+            $("#isDone").val("true");
+        }
+
+        $("#todoForm").attr("action", "/update");
+        $('#todoForm').submit();
+    }
+
+    function fnAddTodo() {
+        if ($("#todoTitle").val() == "") {
+            alert("Title is empty ");
+            return;
+        }
+
+        $("#todoForm").attr("action", "/add");
+        $('#todoForm').submit();
+    }
+</script>
+
+</body>
+</html>
