@@ -19,25 +19,56 @@
 </form>
 
 <ul id="myUL">
-    <li>Hit the gym</li>
-    <li class="checked">Pay bills</li>
-    <li>Meet George</li>
-    <li>Buy eggs</li>
-    <li>Read a book</li>
-    <li>Organize office</li>
 </ul>
 
 <script>
     $( document ).ready(function() {
-        console.log( "ready!" );
-
-
+        fnGetTodoList();
     });
+
+    function fnGetTodoList() {
+        var todoList = "";
+
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:8888/data/list',
+            dataType: 'json',
+            success: function (data) {
+                console.log(data)
+                $.each(data, function(index, element) {
+                    if(element.is_done == true) {
+                        todoList += '<li class="checked">'
+                            + '<a href="javascript:fnUpdateTodo(\'' + element.todo_idx + '\',\'' + element.is_done + '\')">' + element.todo_title + '</a>'
+                            + '<span class="close" onclick="fnDeleteTodo(\''+ element.todo_idx + '\')">\u00D7</span></li>';
+                    }else{
+                        todoList += '<li>'
+                            + '<a href="javascript:fnUpdateTodo(\'' + element.todo_idx + '\',\'' + element.is_done + '\')">' + element.todo_title + '</a>'
+                            + '<span class="close" onclick="fnDeleteTodo(\''+ element.todo_idx + '\')">\u00D7</span></li>';
+                    }
+
+                    $('ul').html(todoList);
+                });
+            }
+        });
+    }
 
     function fnDeleteTodo(selectIdx) {
         $("#todoIdx").val(selectIdx);
-        $("#todoForm").attr("action", "/delete");
-        $('#todoForm').submit();
+        var todoForm = $("#todoForm").serialize();
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:8888/data/delete',
+            data: todoForm,
+            dataType: 'text',
+            success: function (data) {
+                if(data == "s"){
+                    fnGetTodoList();
+                }else{
+                    alert("Todo can not delete.");
+                }
+            }
+        });
     }
 
     function fnUpdateTodo(selectIdx,curIsDone) {
@@ -49,8 +80,21 @@
             $("#isDone").val("true");
         }
 
-        $("#todoForm").attr("action", "/update");
-        $('#todoForm').submit();
+        var todoForm = $("#todoForm").serialize();
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:8888/data/update',
+            data: todoForm,
+            dataType: 'text',
+            success: function (data) {
+                if(data == "s"){
+                    fnGetTodoList();
+                }else{
+                    alert("Todo can not update ");
+                }
+            }
+        });
     }
 
     function fnAddTodo() {
@@ -58,9 +102,21 @@
             alert("Title is empty ");
             return;
         }
+        var todoForm = $("#todoForm").serialize();
 
-        $("#todoForm").attr("action", "/add");
-        $('#todoForm').submit();
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:8888/data/add',
+            data: todoForm,
+            dataType: 'text',
+            success: function (data) {
+                if(data == "s"){
+                    fnGetTodoList();
+                }else{
+                    alert("Todo can not insert ");
+                }
+            }
+        });
     }
 </script>
 
